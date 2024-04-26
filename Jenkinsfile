@@ -1,9 +1,9 @@
 pipeline {
      environment {
-       IMAGE_NAME = "alpinehelloworld"
+       IMAGE_NAME = "alpinehellogalaxy"
        IMAGE_TAG = "latest"
-       STAGING = "eazytraining-staging"
-       PRODUCTION = "eazytraining-production"
+       STAGING = "jenkins-training-staging"
+       PRODUCTION = "jenkins-training-production"
      }
      agent none
      stages {
@@ -11,7 +11,7 @@ pipeline {
              agent any
              steps {
                 script {
-                  sh 'docker build -t eazytraining/$IMAGE_NAME:$IMAGE_TAG .'
+                  sh 'docker build -t hbessala/$IMAGE_NAME:$IMAGE_TAG .'
                 }
              }
         }
@@ -20,7 +20,7 @@ pipeline {
             steps {
                script {
                  sh '''
-                    docker run --name $IMAGE_NAME -d -p 80:5000 -e PORT=5000 eazytraining/$IMAGE_NAME:$IMAGE_TAG
+                    docker run --name $IMAGE_NAME -d -p 80:5000 -e PORT=5000 hbessala/$IMAGE_NAME:$IMAGE_TAG
                     sleep 5
                  '''
                }
@@ -31,7 +31,7 @@ pipeline {
            steps {
               script {
                 sh '''
-                    curl http://localhost | grep -q "Hello world!"
+                    curl http://localhost | grep -q "Hello Galaxy!"
                 '''
               }
            }
@@ -49,7 +49,7 @@ pipeline {
      }
      stage('Push image in staging and deploy it') {
        when {
-              expression { GIT_BRANCH == 'origin/master' }
+              expression { GIT_BRANCH == 'origin/main' }
             }
       agent any
       environment {
@@ -68,7 +68,7 @@ pipeline {
      }
      stage('Push image in production and deploy it') {
        when {
-              expression { GIT_BRANCH == 'origin/master' }
+              expression { GIT_BRANCH == 'origin/main' }
             }
       agent any
       environment {
