@@ -75,7 +75,7 @@ pipeline {
         }
      }
      stage ('Clean container') {
-      agen any
+      agent any
       steps {
         script {
           sh '''
